@@ -61,5 +61,34 @@
       <p>Семейный бюджет · учебный проект · 2026</p>
     </div>
   </footer>
+
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему" aria-pressed="false">
+    🌙
+  </button>
+
+  <script>
+    const root = document.documentElement;
+    const themeToggle = document.getElementById("themeToggle");
+    const savedTheme = localStorage.getItem("landingTheme");
+    const initialTheme = savedTheme === "dark" ? "dark" : "light";
+
+    function syncThemeButton(theme) {
+      const isDark = theme === "dark";
+      themeToggle.textContent = isDark ? "☀️" : "🌙";
+      themeToggle.setAttribute("aria-label", isDark ? "Включить светлую тему" : "Включить тёмную тему");
+      themeToggle.setAttribute("aria-pressed", String(isDark));
+    }
+
+    root.setAttribute("data-theme", initialTheme);
+    syncThemeButton(initialTheme);
+
+    themeToggle.addEventListener("click", function () {
+      const currentTheme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      const nextTheme = currentTheme === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", nextTheme);
+      localStorage.setItem("landingTheme", nextTheme);
+      syncThemeButton(nextTheme);
+    });
+  </script>
 </body>
 </html>
