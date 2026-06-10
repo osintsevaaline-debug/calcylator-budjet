@@ -1,0 +1,20 @@
+{
+  "name": "Семейный бюджет",
+  "short_name": "Бюджет",
+  "description": "Калькулятор семейного бюджета: доходы, расходы, цели и накопления.",
+  "start_url": "./calculator.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8f4ff",
+  "theme_color": "#7c3aed",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

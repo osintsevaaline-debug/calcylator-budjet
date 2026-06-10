@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="refresh" content="0; url=./calculator.html" />
-  <link rel="canonical" href="./calculator.html" />
-  <title>Калькулятор семейного бюджета</title>
-  <script>location.replace("./calculator.html");</script>
+  <meta name="description" content="Калькулятор семейного бюджета: доходы, расходы, цели и накопления." />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Семейный бюджет" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icons/icon.svg" />
 
   <style>
     /*
@@ -1023,6 +1026,12 @@
     initTheme();
     renderHistoryOptions();
     loadData();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("./sw.js").catch(function () {});
+      });
+    }
   </script>
 </body>
 </html>
