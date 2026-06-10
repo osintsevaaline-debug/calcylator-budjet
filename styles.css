@@ -16,7 +16,8 @@
   --font-body: "Plus Jakarta Sans", "Segoe UI", sans-serif;
 }
 
-[data-theme="dark"] {
+html[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0c0618;
   --surface: rgba(30, 20, 55, 0.72);
   --surface-solid: #1a1230;
@@ -64,7 +65,7 @@ body::before {
   animation: bgShift 16s ease-in-out infinite alternate;
 }
 
-[data-theme="dark"] body::before {
+html[data-theme="dark"] body::before {
   background:
     radial-gradient(circle at 15% 20%, rgba(244, 63, 94, 0.22), transparent 34%),
     radial-gradient(circle at 82% 12%, rgba(6, 182, 212, 0.2), transparent 30%),
@@ -95,7 +96,7 @@ body::before {
   animation: floatBlob 14s ease-in-out infinite;
 }
 
-[data-theme="dark"] .blob {
+html[data-theme="dark"] .blob {
   mix-blend-mode: screen;
   opacity: 0.45;
 }
@@ -138,7 +139,7 @@ body::before {
   animation: gridPulse 8s ease-in-out infinite;
 }
 
-[data-theme="dark"] .grid-glow {
+html[data-theme="dark"] .grid-glow {
   background-image:
     linear-gradient(rgba(167, 139, 250, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(167, 139, 250, 0.08) 1px, transparent 1px);
@@ -208,7 +209,7 @@ h1 {
   color: transparent;
 }
 
-[data-theme="dark"] h1 {
+html[data-theme="dark"] h1 {
   background: linear-gradient(120deg, #ffffff 0%, #c4b5fd 40%, #fb7185 75%, #67e8f9 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -403,22 +404,26 @@ h1 {
   right: 20px;
   bottom: 20px;
   z-index: 1000;
-  width: 56px;
-  height: 56px;
+  width: 54px;
+  height: 54px;
+  margin: 0;
+  padding: 0;
   border: 1px solid var(--border);
   border-radius: 50%;
-  background: var(--surface);
-  backdrop-filter: blur(12px);
+  background: var(--surface-solid);
   color: var(--text);
-  font-size: 1.25rem;
+  font-size: 22px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   box-shadow: var(--shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  animation: pulseToggle 3s ease-in-out infinite;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .theme-toggle:hover {
-  transform: translateY(-3px) rotate(12deg);
+  transform: translateY(-2px);
 }
 
 .theme-toggle:active {
@@ -434,11 +439,6 @@ h1 {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes pulseToggle {
-  0%, 100% { box-shadow: 0 12px 28px var(--glow); }
-  50% { box-shadow: 0 12px 36px rgba(244, 63, 94, 0.35); }
 }
 
 @media (max-width: 860px) {

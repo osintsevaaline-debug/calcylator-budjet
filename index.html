@@ -15,6 +15,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="./theme.js"></script>
+  <script>FamilyBudgetTheme.applySavedTheme();</script>
 </head>
 <body>
   <div class="bg-animation" aria-hidden="true">
@@ -86,28 +88,8 @@
   </button>
 
   <script>
-    const root = document.documentElement;
-    const themeToggle = document.getElementById("themeToggle");
-    const savedTheme = localStorage.getItem("landingTheme");
-    const initialTheme = savedTheme === "dark" ? "dark" : "light";
-
-    function syncThemeButton(theme) {
-      const isDark = theme === "dark";
-      themeToggle.textContent = isDark ? "☀️" : "🌙";
-      themeToggle.setAttribute("aria-label", isDark ? "Включить светлую тему" : "Включить тёмную тему");
-      themeToggle.setAttribute("aria-pressed", String(isDark));
-    }
-
-    root.setAttribute("data-theme", initialTheme);
-    syncThemeButton(initialTheme);
-
-    themeToggle.addEventListener("click", function () {
-      const currentTheme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-      const nextTheme = currentTheme === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", nextTheme);
-      localStorage.setItem("landingTheme", nextTheme);
-      syncThemeButton(nextTheme);
-    });
+    FamilyBudgetTheme.initTheme({ toggle: true });
+    FamilyBudgetTheme.bootToggle();
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {

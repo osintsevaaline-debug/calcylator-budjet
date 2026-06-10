@@ -1,9 +1,10 @@
-const CACHE_NAME = "family-budget-v1";
+const CACHE_NAME = "family-budget-v2";
 const ASSETS = [
   "./",
   "./index.html",
   "./calculator.html",
   "./styles.css",
+  "./theme.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./гонки-за-цифрами.html"

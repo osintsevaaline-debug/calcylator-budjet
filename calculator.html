@@ -10,6 +10,8 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="./icons/icon.svg" />
+  <script src="./theme.js"></script>
+  <script>FamilyBudgetTheme.applySavedTheme();</script>
 
   <style>
     /*
@@ -65,7 +67,7 @@
       --info-text: #3730a3;
     }
 
-    [data-theme="dark"] {
+    html[data-theme="dark"] {
       --bg: #0f172a;
       --text: #e2e8f0;
       --title: #f8fafc;
@@ -309,30 +311,6 @@
       font-size: 14px;
     }
 
-    .theme-toggle {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      border: 1px solid var(--input-border);
-      background: var(--card-bg);
-      color: var(--text);
-      box-shadow: var(--theme-toggle-shadow);
-      z-index: 1000;
-      font-size: 22px;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-    }
-
-    .theme-toggle:hover {
-      transform: translateY(-2px);
-    }
-
     .toolbar {
       margin-top: 20px;
       display: grid;
@@ -516,10 +494,7 @@
     </p>
   </div>
 
-  <!-- Кнопка переключения темы (всегда в правом нижнем углу) -->
-  <button id="themeToggle" class="theme-toggle" type="button" aria-label="Включить тёмную тему" aria-pressed="false">🌙</button>
-
-  <!-- Скрипт: калькулятор бюджета + переключение светлой/тёмной темы -->
+  <!-- Скрипт: калькулятор бюджета -->
   <script>
     /*
       ================================
@@ -529,8 +504,6 @@
 
     const STORAGE_KEY = "familyBudgetCalculator";
     const HISTORY_KEY = "familyBudgetHistory";
-    const THEME_STORAGE_KEY = "familyBudgetTheme";
-
     const defaultData = {
       incomeList: [
         { name: "Зарплата 1", value: 0 },
@@ -555,25 +528,10 @@
       goalName: ""
     };
 
-    const themeToggleButton = document.getElementById("themeToggle");
     const historySelect = document.getElementById("historySelect");
     const importFileInput = document.getElementById("importFile");
     const formMessage = document.getElementById("formMessage");
     const savingGoalInput = document.getElementById("savingGoal");
-
-    function applyTheme(theme) {
-      document.documentElement.setAttribute("data-theme", theme);
-      const isDark = theme === "dark";
-      themeToggleButton.textContent = isDark ? "☀️" : "🌙";
-      themeToggleButton.setAttribute("aria-label", isDark ? "Включить светлую тему" : "Включить тёмную тему");
-      themeToggleButton.setAttribute("aria-pressed", String(isDark));
-    }
-
-    function initTheme() {
-      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-      const initialTheme = savedTheme === "dark" ? "dark" : "light";
-      applyTheme(initialTheme);
-    }
 
     function formatMoney(value) {
       return new Intl.NumberFormat("ru-RU").format(value) + " ₽";
@@ -1016,14 +974,6 @@
       reader.readAsText(file);
     });
 
-    themeToggleButton.addEventListener("click", function () {
-      const currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
-      const nextTheme = currentTheme === "dark" ? "light" : "dark";
-      applyTheme(nextTheme);
-      localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-    });
-
-    initTheme();
     renderHistoryOptions();
     loadData();
 
