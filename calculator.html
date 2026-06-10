@@ -10,7 +10,20 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="./icons/icon.svg" />
-  <script src="./theme.js"></script>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem("familyBudgetTheme") || localStorage.getItem("landingTheme");
+        if (theme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.classList.add("dark");
+        }
+      } catch (error) {
+        /* ignore */
+      }
+    })();
+  </script>
+  <script src="./theme.js?v=3"></script>
   <script>FamilyBudgetTheme.applySavedTheme();</script>
 
   <style>
@@ -67,6 +80,7 @@
       --info-text: #3730a3;
     }
 
+    html.dark,
     html[data-theme="dark"] {
       --bg: #0f172a;
       --text: #e2e8f0;
@@ -979,7 +993,7 @@
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
-        navigator.serviceWorker.register("./sw.js").catch(function () {});
+        navigator.serviceWorker.register("./sw.js?v=3").catch(function () {});
       });
     }
   </script>

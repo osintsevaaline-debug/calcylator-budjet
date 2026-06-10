@@ -3,16 +3,20 @@
   const LEGACY_KEY = "landingTheme";
 
   function getTheme() {
-    const saved = localStorage.getItem(THEME_KEY);
-    if (saved === "dark" || saved === "light") {
-      return saved;
-    }
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "dark" || saved === "light") {
+        return saved;
+      }
 
-    const legacy = localStorage.getItem(LEGACY_KEY);
-    if (legacy === "dark" || legacy === "light") {
-      localStorage.setItem(THEME_KEY, legacy);
-      localStorage.removeItem(LEGACY_KEY);
-      return legacy;
+      const legacy = localStorage.getItem(LEGACY_KEY);
+      if (legacy === "dark" || legacy === "light") {
+        localStorage.setItem(THEME_KEY, legacy);
+        localStorage.removeItem(LEGACY_KEY);
+        return legacy;
+      }
+    } catch (error) {
+      return "light";
     }
 
     return "light";
@@ -20,11 +24,18 @@
 
   function applyTheme(theme) {
     const nextTheme = theme === "dark" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", nextTheme);
+    const root = document.documentElement;
+
+    root.setAttribute("data-theme", nextTheme);
+    root.classList.toggle("dark", nextTheme === "dark");
+
+    if (document.body) {
+      document.body.classList.toggle("theme-dark", nextTheme === "dark");
+    }
 
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
-      meta.setAttribute("content", nextTheme === "dark" ? "#0c0618" : "#7c3aed");
+      meta.setAttribute("content", nextTheme === "dark" ? "#070312" : "#7c3aed");
     }
 
     return nextTheme;
@@ -42,7 +53,14 @@
 
   function setTheme(theme) {
     const nextTheme = applyTheme(theme);
-    localStorage.setItem(THEME_KEY, nextTheme);
+
+    try {
+      localStorage.setItem(THEME_KEY, nextTheme);
+      localStorage.removeItem(LEGACY_KEY);
+    } catch (error) {
+      /* ignore storage errors */
+    }
+
     syncToggleButton(nextTheme);
     return nextTheme;
   }
@@ -65,8 +83,9 @@
 
   function bootToggle() {
     const button = document.getElementById("themeToggle");
-    if (!button) return;
+    if (!button || button.dataset.themeBound === "true") return;
 
+    button.dataset.themeBound = "true";
     button.addEventListener("click", function () {
       toggleTheme();
     });

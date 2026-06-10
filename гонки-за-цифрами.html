@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Гонки за цифрами</title>
   <meta name="theme-color" content="#7c3aed">
-  <script src="./theme.js"></script>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem("familyBudgetTheme") || localStorage.getItem("landingTheme");
+        if (theme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.classList.add("dark");
+        }
+      } catch (error) {
+        /* ignore */
+      }
+    })();
+  </script>
+  <script src="./theme.js?v=3"></script>
   <script>FamilyBudgetTheme.applySavedTheme();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

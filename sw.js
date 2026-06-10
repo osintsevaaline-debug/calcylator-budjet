@@ -1,19 +1,17 @@
-const CACHE_NAME = "family-budget-v2";
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./calculator.html",
-  "./styles.css",
-  "./theme.js",
-  "./manifest.webmanifest",
+const CACHE_NAME = "family-budget-v3";
+const STATIC_ASSETS = [
   "./icons/icon.svg",
-  "./гонки-за-цифрами.html"
+  "./manifest.webmanifest"
 ];
+
+function isFreshAsset(url) {
+  return /\.(html|css|js|webmanifest)(\?.*)?$/i.test(url.pathname) || url.pathname.endsWith("/");
+}
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
-      return cache.addAll(ASSETS);
+      return cache.addAll(STATIC_ASSETS);
     })
   );
   self.skipWaiting();
@@ -23,27 +21,29 @@ self.addEventListener("activate", function (event) {
   event.waitUntil(
     caches.keys().then(function (keys) {
       return Promise.all(
-        keys
-          .filter(function (key) {
-            return key !== CACHE_NAME;
-          })
-          .map(function (key) {
+        keys.map(function (key) {
+          if (key !== CACHE_NAME) {
             return caches.delete(key);
-          })
+          }
+        })
       );
+    }).then(function () {
+      return self.clients.claim();
     })
   );
-  self.clients.claim();
 });
 
 self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
 
-  event.respondWith(
-    caches.match(event.request).then(function (cached) {
-      const networkFetch = fetch(event.request)
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (isFreshAsset(url)) {
+    event.respondWith(
+      fetch(event.request)
         .then(function (response) {
-          if (response && response.status === 200 && response.type === "basic") {
+          if (response && response.status === 200) {
             const copy = response.clone();
             caches.open(CACHE_NAME).then(function (cache) {
               cache.put(event.request, copy);
@@ -52,10 +52,15 @@ self.addEventListener("fetch", function (event) {
           return response;
         })
         .catch(function () {
-          return cached;
-        });
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
 
-      return cached || networkFetch;
+  event.respondWith(
+    caches.match(event.request).then(function (cached) {
+      return cached || fetch(event.request);
     })
   );
 });
